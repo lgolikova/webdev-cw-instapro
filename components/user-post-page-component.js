@@ -75,10 +75,15 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
                 .join("");
 
             // console.log("Актуальный список постов:", posts);
+            const userInfo = posts[0].user;
 
             appEl.innerHTML = `
                 <div class="page-container">
                     <div class="header-container"></div>
+                    <div class="user-profile">
+                        <img src="${userInfo.imageUrl}" class="user-profile__avatar">
+                        <h2 class="user-profile__name">${userInfo.name}</h2>
+                    </div>
                     <ul class="posts">
                         ${postsHtml}
                     </ul>
