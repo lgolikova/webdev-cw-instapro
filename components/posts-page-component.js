@@ -7,7 +7,7 @@ export function renderPostsPageComponent({ appEl }) {
     // @TODO: реализовать рендер постов из api - готово
     const token = getToken();
 
-    fetch("https://wedev-api.sky.pro/api/v1/prod/instapro", {
+    fetch("https://wedev-api.sky.pro/api/v1/lgolikova/instapro", {
         method: "GET",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
