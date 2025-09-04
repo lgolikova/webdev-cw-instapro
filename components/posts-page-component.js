@@ -6,7 +6,6 @@ import { likePost, dislikePost } from "../api.js";
 import { validateText } from "../helpers.js";
 
 export function renderPostsPageComponent({ appEl }) {
-    // @TODO: реализовать рендер постов из api - готово
     const token = getToken();
 
     fetch("https://wedev-api.sky.pro/api/v1/lgolikova/instapro", {
@@ -49,15 +48,13 @@ export function renderPostsPageComponent({ appEl }) {
                             <img class="post-image" src="${post.imageUrl}">
                           </div>
                           <div class="post-likes">
-                            <button data-post-id="${
-                                post.id
-                            }" class="like-button">
-                              <img src="./assets/images/${
-                                  post.isLiked
-                                      ? "like-active.svg"
-                                      : "like-not-active.svg"
-                              }">
-                            </button>
+                          <button data-post-id="${post.id}" class="like-button">
+                            <img src="./assets/images/${
+                                post.isLiked
+                                    ? "like-active.svg"
+                                    : "like-not-active.svg"
+                            }">
+                          </button>
                             <p class="post-likes-text">
                               Нравится: <strong>${post.likes.length}</strong>
                             </p>
@@ -104,7 +101,6 @@ export function renderPostsPageComponent({ appEl }) {
                             const updatedPost = data.post;
 
                             const postEl = likeButton.closest(".post");
-
                             const likeImg =
                                 postEl.querySelector(".like-button img");
                             likeImg.src = `./assets/images/${

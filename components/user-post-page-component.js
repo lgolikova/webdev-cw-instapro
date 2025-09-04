@@ -3,7 +3,7 @@ import { renderHeaderComponent } from "./header-component.js";
 import { goToPage } from "../index.js";
 import { getToken } from "../index.js";
 import { likePost, dislikePost } from "../api.js";
-import { validateText } from "../helpers.js"
+import { validateText } from "../helpers.js";
 
 export function renderUserPostsPageComponent({ appEl, userId }) {
     const token = getToken();
@@ -51,21 +51,23 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
                                 <img class="post-image" src="${post.imageUrl}">
                             </div>
                             <div class="post-likes">
-                                <button data-post-id="${
-                                    post.id
-                                }" class="like-button">
-                                <img src="./assets/images/${
-                                    post.isLiked
-                                        ? "like-active.svg"
-                                        : "like-not-active.svg"
-                                }">
-                                </button>
+                            <button data-post-id="${
+                                post.id
+                            }" class="like-button">
+                            <img src="./assets/images/${
+                                post.isLiked
+                                    ? "like-active.svg"
+                                    : "like-not-active.svg"
+                            }">
+                            </button>
                                 <p class="post-likes-text">
                                 Нравится: <strong>${post.likes.length}</strong>
                                 </p>
                             </div>
                             <p class="post-text">
-                                <span class="user-name">${validateText(post.user.name)}</span>
+                                <span class="user-name">${validateText(
+                                    post.user.name
+                                )}</span>
                                 ${validateText(post.description)}
                             </p>
                             <p class="post-date">
