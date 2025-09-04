@@ -133,6 +133,11 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
                 element: document.querySelector(".header-container"),
             });
 
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+
             for (let userEl of document.querySelectorAll(".post-header")) {
                 userEl.addEventListener("click", () => {
                     goToPage(USER_POSTS_PAGE, {
