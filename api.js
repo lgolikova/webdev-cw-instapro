@@ -42,6 +42,42 @@ export function addPost({ description, imageUrl }) {
     });
 }
 
+// Поставить лайк
+export function likePost({ postId }) {
+    return fetch(
+        `https://wedev-api.sky.pro/api/v1/lgolikova/instapro/${postId}/like`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: getToken(),
+            },
+        }
+    ).then((response) => {
+        if (!response.ok) {
+            throw new Error("Ошибка при постановке лайка");
+        }
+        return response.json();
+    });
+}
+
+// Убрать лайк
+export function dislikePost({ postId }) {
+    return fetch(
+        `https://wedev-api.sky.pro/api/v1/lgolikova/instapro/${postId}/dislike`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: getToken(),
+            },
+        }
+    ).then((response) => {
+        if (!response.ok) {
+            throw new Error("Ошибка при снятии лайка");
+        }
+        return response.json();
+    });
+}
+
 export function registerUser({ login, password, name, imageUrl }) {
     return fetch(baseHost + "/api/user", {
         method: "POST",

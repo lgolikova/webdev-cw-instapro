@@ -2,6 +2,7 @@ import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { goToPage } from "../index.js";
 import { getToken } from "../index.js";
+import { likePost, dislikePost } from "../api.js";
 
 export function renderUserPostsPageComponent({ appEl, userId }) {
     const token = getToken();
@@ -75,6 +76,7 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
                 .join("");
 
             // console.log("Актуальный список постов:", posts);
+
             const userInfo = posts[0].user;
 
             appEl.innerHTML = `
@@ -94,6 +96,38 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
              * @TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
              * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
              */
+
+            for (let likeButton of document.querySelectorAll(".like-button")) {
+                likeButton.addEventListener("click", () => {
+                    const postId = likeButton.dataset.postId;
+                    const isLiked = likeButton
+                        .querySelector("img")
+                        .src.includes("like-active.svg");
+
+                    (isLiked ? dislikePost({ postId }) : likePost({ postId }))
+                        .then((data) => {
+                            const updatedPost = data.post;
+
+                            const postEl = likeButton.closest(".post");
+                            const likeImg =
+                                postEl.querySelector(".like-button img");
+                            likeImg.src = `./assets/images/${
+                                updatedPost.isLiked
+                                    ? "like-active.svg"
+                                    : "like-not-active.svg"
+                            }`;
+
+                            const likesText = postEl.querySelector(
+                                ".post-likes-text strong"
+                            );
+                            likesText.textContent = updatedPost.likes.length;
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            alert("Ошибка: " + error.message);
+                        });
+                });
+            }
 
             renderHeaderComponent({
                 element: document.querySelector(".header-container"),
