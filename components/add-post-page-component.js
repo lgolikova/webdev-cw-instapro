@@ -1,4 +1,5 @@
 import { renderUploadImageComponent } from "./upload-image-component.js";
+import { validateText } from "../helpers.js";
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     let uploadedImageUrl = "";
@@ -28,9 +29,9 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         });
 
         document.getElementById("add-button").addEventListener("click", () => {
-            const description = document
-                .getElementById("desc-input")
-                .value.trim();
+            const description = validateText(
+                document.getElementById("desc-input").value.trim()
+            );
 
             onAddPostClick({
                 description,

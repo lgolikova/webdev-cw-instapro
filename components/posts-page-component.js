@@ -3,6 +3,7 @@ import { renderHeaderComponent } from "./header-component.js";
 import { goToPage } from "../index.js";
 import { getToken } from "../index.js";
 import { likePost, dislikePost } from "../api.js";
+import { validateText } from "../helpers.js";
 
 export function renderPostsPageComponent({ appEl }) {
     // @TODO: реализовать рендер постов из api - готово
@@ -62,8 +63,10 @@ export function renderPostsPageComponent({ appEl }) {
                             </p>
                           </div>
                           <p class="post-text">
-                            <span class="user-name">${post.user.name}</span>
-                            ${post.description}
+                            <span class="user-name">${validateText(
+                                post.user.name
+                            )}</span>
+                            ${validateText(post.description)}
                           </p>
                           <p class="post-date">
                             ${dateString}
@@ -117,7 +120,7 @@ export function renderPostsPageComponent({ appEl }) {
                         })
                         .catch((error) => {
                             console.error(error);
-                            alert("Ошибка: " + error.message);
+                            // alert("Ошибка: " + error.message);
                         });
                 });
             }

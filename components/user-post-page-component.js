@@ -3,6 +3,7 @@ import { renderHeaderComponent } from "./header-component.js";
 import { goToPage } from "../index.js";
 import { getToken } from "../index.js";
 import { likePost, dislikePost } from "../api.js";
+import { validateText } from "../helpers.js"
 
 export function renderUserPostsPageComponent({ appEl, userId }) {
     const token = getToken();
@@ -64,8 +65,8 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
                                 </p>
                             </div>
                             <p class="post-text">
-                                <span class="user-name">${post.user.name}</span>
-                                ${post.description}
+                                <span class="user-name">${validateText(post.user.name)}</span>
+                                ${validateText(post.description)}
                             </p>
                             <p class="post-date">
                                 ${dateString}
@@ -124,7 +125,7 @@ export function renderUserPostsPageComponent({ appEl, userId }) {
                         })
                         .catch((error) => {
                             console.error(error);
-                            alert("Ошибка: " + error.message);
+                            // alert("Ошибка: " + error.message);
                         });
                 });
             }
