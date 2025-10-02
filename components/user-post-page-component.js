@@ -5,16 +5,19 @@ import { getToken } from "../index.js";
 import { likePost, dislikePost } from "../api.js";
 import { validateText } from "../helpers.js";
 
-export function renderPostsPageComponent({ appEl }) {
+export function renderUserPostsPageComponent({ appEl, userId }) {
     const token = getToken();
 
-    fetch("https://wedev-api.sky.pro/api/v1/lgolikova/instapro", {
-        method: "GET",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-    })
+    fetch(
+        `https://wedev-api.sky.pro/api/v1/lgolikova/instapro/user-posts/${userId}`,
+        {
+            method: "GET",
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+    )
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Ошибка при получении постов");
+                throw new Error("Ошибка при получении постов пользователя");
             }
             return response.json();
         })
@@ -34,55 +37,63 @@ export function renderPostsPageComponent({ appEl }) {
 
                     return `
                         <li class="post">
-                          <div class="post-header" data-user-id="${
-                              post.user.id
-                          }">
-                              <img src="${
-                                  post.user.imageUrl
-                              }" class="post-header__user-image">
-                              <p class="post-header__user-name">${
-                                  post.user.name
-                              }</p>
-                          </div>
-                          <div class="post-image-container">
-                            <img class="post-image" src="${post.imageUrl}">
-                          </div>
-                          <div class="post-likes">
-                          <button data-post-id="${post.id}" class="like-button">
+                            <div class="post-header" data-user-id="${
+                                post.user.id
+                            }">
+                                <img src="${
+                                    post.user.imageUrl
+                                }" class="post-header__user-image">
+                                <p class="post-header__user-name">${
+                                    post.user.name
+                                }</p>
+                            </div>
+                            <div class="post-image-container">
+                                <img class="post-image" src="${post.imageUrl}">
+                            </div>
+                            <div class="post-likes">
+                            <button data-post-id="${
+                                post.id
+                            }" class="like-button">
                             <img src="./assets/images/${
                                 post.isLiked
                                     ? "like-active.svg"
                                     : "like-not-active.svg"
                             }">
-                          </button>
-                            <p class="post-likes-text">
-                              Нравится: <strong>${post.likes.length}</strong>
+                            </button>
+                                <p class="post-likes-text">
+                                Нравится: <strong>${post.likes.length}</strong>
+                                </p>
+                            </div>
+                            <p class="post-text">
+                                <span class="user-name">${validateText(
+                                    post.user.name
+                                )}</span>
+                                ${validateText(post.description)}
                             </p>
-                          </div>
-                          <p class="post-text">
-                            <span class="user-name">${validateText(
-                                post.user.name
-                            )}</span>
-                            ${validateText(post.description)}
-                          </p>
-                          <p class="post-date">
-                            ${dateString}
-                          </p>
+                            <p class="post-date">
+                                ${dateString}
+                            </p>
                         </li>
-                      `;
+                    `;
                 })
                 .join("");
 
             // console.log("Актуальный список постов:", posts);
 
+            const userInfo = posts[0].user;
+
             appEl.innerHTML = `
                 <div class="page-container">
-                  <div class="header-container"></div>
-                  <ul class="posts">
-                    ${postsHtml}
-                  </ul>
+                    <div class="header-container"></div>
+                    <div class="user-profile">
+                        <img src="${userInfo.imageUrl}" class="user-profile__avatar">
+                        <h2 class="user-profile__name">${userInfo.name}</h2>
+                    </div>
+                    <ul class="posts">
+                        ${postsHtml}
+                    </ul>
                 </div>
-              `;
+            `;
 
             /**
              * @TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
@@ -123,6 +134,11 @@ export function renderPostsPageComponent({ appEl }) {
 
             renderHeaderComponent({
                 element: document.querySelector(".header-container"),
+            });
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
             });
 
             for (let userEl of document.querySelectorAll(".post-header")) {
